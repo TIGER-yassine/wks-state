@@ -1,25 +1,53 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import React, { Component } from "react";
+import AddTask from "./components/AddTask";
+import TaskList from "./components/TaskList";
+
+export default class App extends Component {
+  state = {
+    tasks: [
+      {
+        id: Math.random(),
+        action: "Learn HTML",
+        isdone: true,
+      },
+      {
+        id: Math.random(),
+        action: "Learn CSS",
+        isdone: true,
+      },
+      {
+        id: Math.random(),
+        action: "Learn API",
+        isdone: false,
+      },
+    ],
+  };
+  handelDelet = (TaskID) => {
+    this.setState({ tasks: this.state.tasks.filter((el) => el.id !== TaskID) });
+  };
+  handelComplete = (TaskID) => {
+    this.setState({
+      tasks: this.state.tasks.map((el) =>
+        el.id === TaskID ? { ...el, isdone: !el.isdone } : el
+      ),
+    });
+  };
+  handeladd = (inputVal) => {
+    const newTodo = { id: Math.random(), action: inputVal, isdone: false };
+    this.setState({ tasks: [...this.state.tasks, newTodo] });
+  };
+  render() {
+    return (
+      <div className="App">
+        <AddTask add={this.handeladd} />
+        <TaskList
+          tasks={this.state.tasks}
+          del={this.handelDelet}
+          comp={this.handelComplete}
+        />
+      </div>
+    );
+  }
 }
-
-export default App;
